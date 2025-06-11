@@ -11,7 +11,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t balkhair/phpproject:v1 .'
+                    sh 'docker build -t balkhair/phpprojectimg:v1 .'
                 }
             }
         }
@@ -20,7 +20,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-pwd', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                     sh "echo $PASS | docker login -u $USER --password-stdin"
-                    sh 'docker push balkhair786/phpproject:v1'
+                    sh 'docker push balkhair786/phpprojectimg:v1'
                 }
             }
         }
@@ -28,7 +28,7 @@ pipeline {
         stage('Deploy to Remote') {
             steps {
                 script {
-                    def dockerCmd = 'docker run -itd --name my-php-container -p 8081:80 balkhair786/phpproject:v1'
+                    def dockerCmd = 'docker run -itd --name my-php-container -p 8081:80 balkhair786/phpprojectimg:v1'
                     sshagent(['hba-key']) {
                         sh "ssh -o StrictHostKeyChecking=no vagrant@192.168.56.100 '${dockerCmd}'"
                     }
