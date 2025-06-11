@@ -11,7 +11,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t balkhair786/phpproject:v1 .'
+                    sh 'docker build -t balkhair/phpproject:v1 .'
                 }
             }
         }
